@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Management</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app" class="container">
+        <h1>Product Management</h1>
+        
+        <!-- Category Management -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h2>Categories</h2>
+            </div>
+            <div class="card-body">
+                <form @submit.prevent="saveCategory" class="form-inline mb-2">
+                    <input type="text" v-model="newCategory.name" placeholder="New category" class="form-control mr-2">
+                    <button type="submit" class="btn btn-primary">Save Category</button>
+                </form>
+                <ul class="list-group">
+                    <li v-for="category in categories" :key="category.id" class="list-group-item d-flex justify-content-between align-items-center">
+                        {{ category.name }}
+                        <div>
+                            <button @click="editCategory(category)" class="btn btn-sm btn-info mr-2">Edit</button>
+                            <button @click="deleteCategory(category.id)" class="btn btn-sm btn-danger">Delete</button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Product Management -->
+        <div class="card">
+            <div class="card-header">
+                <h2>Products</h2>
+            </div>
+            <div class="card-body">
+                <form @submit.prevent="saveProduct" class="mb-4">
+                    <div class="form-group">
+                        <input type="text" v-model="newProduct.name" placeholder="Product name" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <input type="number" v-model="newProduct.price" placeholder="Product price" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <input type="file" @change="onFileChange" class="form-control-file">
+                    </div>
+                    <div class="form-group">
+                        <label>Categories</label>
+                        <div v-for="category in categories" :key="category.id" class="form-check">
+                            <input type="checkbox" :value="category.id" v-model="newProduct.categories" class="form-check-input">
+                            <label class="form-check-label">{{ category.name }}</label>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save Product</button>
+                </form>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Image</th>
+                            <th>Name</th>
+                            <th>Price</th>
+                            <th>Categories</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="product in products" :key="product.id">
+                            <td><img :src="'../backend/' + product.image" width="50" v-if="product.image"></td>
+                            <td>{{ product.name }}</td>
+                            <td>{{ product.price }}</td>
+                            <td>{{ product.categories }}</td>
+                            <td>
+                                <button @click="editProduct(product)" class="btn btn-sm btn-info mr-2">Edit</button>
+                                <button @click="deleteProduct(product.id)" class="btn btn-sm btn-danger">Delete</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html> 
