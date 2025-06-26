@@ -77,7 +77,7 @@
     }
 
     .badge-category {
-      background: #6c757d;
+      background: #33b56d;
       color: #fff;
       padding: 4px 8px;
       border-radius: 6px;
@@ -151,8 +151,15 @@
           </div>
           <div class="form-group">
             <label>Product Image</label>
-            <input type="file" @change="onFileChange" class="form-control-file" />
+            <input type="file" @change="onFileChange" class="form-control-file mb-2" />
+
+            <!-- ✅ Show existing image if editing -->
+            <div v-if="newProduct.image">
+              <!-- <label>Current Image:</label><br /> -->
+              <img :src="'../backend/' + newProduct.image" alt="Product Image" width="120" class="rounded shadow-sm mt-2" />
+            </div>
           </div>
+
           <div class="form-group">
             <label>Assign Categories</label>
             <div v-for="category in categories" :key="category.id" class="form-check">
@@ -160,7 +167,7 @@
               <label class="form-check-label">{{ category.name }}</label>
             </div>
           </div>
-          <button type="submit" class="btn btn-primary btn-icon mt-3">💾 Save Product</button>
+          <button type="submit" class="btn btn-primary btn-icon mt-3"> Save Product</button>
         </form>
 
         <table class="table table-bordered">
@@ -181,7 +188,7 @@
               <td>{{ product.name }}</td>
               <td>{{ product.price }}</td>
               <td>
-                <span v-for="cat in product.categories" class="badge-category">{{ cat }}</span>
+                <span  class="badge-category">{{ product.categories }}</span>
               </td>
               <td>
                 <button @click="editProduct(product)" class="btn btn-sm btn-outline-info mr-2 btn-icon">✏️ Edit</button>
