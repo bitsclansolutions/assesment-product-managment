@@ -100,8 +100,11 @@ const app = new Vue({
             this.newProduct.name = product.name;
             this.newProduct.price = product.price;
             this.newProduct.image = product.image;
-            if (product.category_ids) {
-                this.newProduct.categories = product.category_ids.split(',').map(Number);
+           if (product.categories ) {
+                // Convert category names to matching IDs
+                this.newProduct.categories = this.categories
+                .filter(cat => product.categories.includes(cat.name))
+                .map(cat => cat.id);
             } else {
                 this.newProduct.categories = [];
             }
