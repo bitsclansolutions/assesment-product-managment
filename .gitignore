@@ -27,3 +27,4 @@ composer.lock
 /composer.lock
 
 config.php
+uploads
