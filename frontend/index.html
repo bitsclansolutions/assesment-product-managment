@@ -1,93 +1,202 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Management</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Product Management</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+
+  <style>
+    body {
+      background: #f5f7fa;
+      font-family: 'Segoe UI', sans-serif;
+      padding: 40px 0;
+    }
+
+    h1, h2 {
+      font-weight: 700;
+      color: #222;
+    }
+
+    .container {
+      max-width: 960px;
+    }
+
+    .card {
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+      margin-bottom: 30px;
+      background: #fff;
+    }
+
+    .card-header {
+      background: #ffffff;
+      border-bottom: 1px solid #eee;
+      border-radius: 12px 12px 0 0;
+      padding: 20px 30px;
+    }
+
+    .card-body {
+      padding: 30px;
+    }
+
+    .form-group label {
+      font-weight: 600;
+    }
+
+    .form-control, .form-control-file {
+      border-radius: 8px;
+      box-shadow: none;
+    }
+
+    .form-check-label {
+      margin-left: 5px;
+      font-weight: 500;
+    }
+
+    .btn {
+      border-radius: 8px;
+      padding: 6px 16px;
+      font-weight: 600;
+    }
+
+    .table {
+      background: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .table thead th {
+      background: #f0f3f5;
+      border: none;
+    }
+
+    .table tbody tr:hover {
+      background-color: #f9f9f9;
+    }
+
+    .badge-category {
+      background: #6c757d;
+      color: #fff;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 12px;
+      margin-right: 4px;
+    }
+
+    .btn-icon {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .list-group-item {
+      border: 1px solid #e2e6ea;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      padding: 10px 20px;
+    }
+
+    input[type="file"] {
+      padding: 8px;
+      background: #fff;
+    }
+  </style>
 </head>
 <body>
-    <div id="app" class="container">
-        <h1>Product Management</h1>
-        
-        <!-- Category Management -->
-        <div class="card mb-4">
-            <div class="card-header">
-                <h2>Categories</h2>
-            </div>
-            <div class="card-body">
-                <form @submit.prevent="saveCategory" class="form-inline mb-2">
-                    <input type="text" v-model="newCategory.name" placeholder="New category" class="form-control mr-2">
-                    <button type="submit" class="btn btn-primary">Save Category</button>
-                </form>
-                <ul class="list-group">
-                    <li v-for="category in categories" :key="category.id" class="list-group-item d-flex justify-content-between align-items-center">
-                        {{ category.name }}
-                        <div>
-                            <button @click="editCategory(category)" class="btn btn-sm btn-info mr-2">Edit</button>
-                            <button @click="deleteCategory(category.id)" class="btn btn-sm btn-danger">Delete</button>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
 
-        <!-- Product Management -->
-        <div class="card">
-            <div class="card-header">
-                <h2>Products</h2>
-            </div>
-            <div class="card-body">
-                <form @submit.prevent="saveProduct" class="mb-4">
-                    <div class="form-group">
-                        <input type="text" v-model="newProduct.name" placeholder="Product name" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <input type="number" v-model="newProduct.price" placeholder="Product price" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <input type="file" @change="onFileChange" class="form-control-file">
-                    </div>
-                    <div class="form-group">
-                        <label>Categories</label>
-                        <div v-for="category in categories" :key="category.id" class="form-check">
-                            <input type="checkbox" :value="category.id" v-model="newProduct.categories" class="form-check-input">
-                            <label class="form-check-label">{{ category.name }}</label>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Save Product</button>
-                </form>
+  <div id="app" class="container">
+    <h1 class="text-center mb-5">🛒 Product Management</h1>
 
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Image</th>
-                            <th>Name</th>
-                            <th>Price</th>
-                            <th>Categories</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="product in products" :key="product.id">
-                            <td><img :src="'../backend/' + product.image" width="50" v-if="product.image"></td>
-                            <td>{{ product.name }}</td>
-                            <td>{{ product.price }}</td>
-                            <td>{{ product.categories }}</td>
-                            <td>
-                                <button @click="editProduct(product)" class="btn btn-sm btn-info mr-2">Edit</button>
-                                <button @click="deleteProduct(product.id)" class="btn btn-sm btn-danger">Delete</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+    <!-- Categories -->
+    <div class="card">
+      <div class="card-header">
+        <h2>Categories</h2>
+      </div>
+      <div class="card-body">
+        <form @submit.prevent="saveCategory" class="form-inline mb-3">
+          <input type="text" v-model="newCategory.name" placeholder="New category name" class="form-control mr-2" />
+          <button type="submit" class="btn btn-success btn-icon">
+            <span>+ Add</span>
+          </button>
+        </form>
+
+        <ul class="list-group">
+          <li v-for="category in categories" :key="category.id" class="list-group-item d-flex justify-content-between align-items-center">
+            {{ category.name }}
+            <div>
+              <button @click="editCategory(category)" class="btn btn-sm btn-outline-info mr-2 btn-icon">✏️ Edit</button>
+              <button @click="deleteCategory(category.id)" class="btn btn-sm btn-outline-danger btn-icon">🗑️ Delete</button>
             </div>
-        </div>
+          </li>
+        </ul>
+      </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="app.js"></script>
+    <!-- Products -->
+    <div class="card">
+      <div class="card-header">
+        <h2>Products</h2>
+      </div>
+      <div class="card-body">
+        <form @submit.prevent="saveProduct" class="mb-5">
+          <div class="form-group">
+            <label>Product Name</label>
+            <input type="text" v-model="newProduct.name" class="form-control" placeholder="Enter product name" />
+          </div>
+          <div class="form-group">
+            <label>Price (PKR)</label>
+            <input type="number" v-model="newProduct.price" class="form-control" placeholder="Enter product price" />
+          </div>
+          <div class="form-group">
+            <label>Product Image</label>
+            <input type="file" @change="onFileChange" class="form-control-file" />
+          </div>
+          <div class="form-group">
+            <label>Assign Categories</label>
+            <div v-for="category in categories" :key="category.id" class="form-check">
+              <input type="checkbox" :value="category.id" v-model="newProduct.categories" class="form-check-input" />
+              <label class="form-check-label">{{ category.name }}</label>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary btn-icon mt-3">💾 Save Product</button>
+        </form>
+
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Image</th>
+              <th>Name</th>
+              <th>Price</th>
+              <th>Categories</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="product in products" :key="product.id">
+              <td>
+                <img :src="'../backend/' + product.image" v-if="product.image" width="50" class="rounded shadow-sm" />
+              </td>
+              <td>{{ product.name }}</td>
+              <td>{{ product.price }}</td>
+              <td>
+                <span v-for="cat in product.categories" class="badge-category">{{ cat }}</span>
+              </td>
+              <td>
+                <button @click="editProduct(product)" class="btn btn-sm btn-outline-info mr-2 btn-icon">✏️ Edit</button>
+                <button @click="deleteProduct(product.id)" class="btn btn-sm btn-outline-danger btn-icon">🗑️ Delete</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Vue & Axios -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="app.js"></script>
 </body>
-</html> 
+</html>
